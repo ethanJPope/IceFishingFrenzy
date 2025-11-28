@@ -23,25 +23,31 @@ public class HookController : MonoBehaviour
         HandleMovement();
     }
 
-    private void HandleInput() {
-        if (Input.GetKey(KeyCode.Space)) {
+    private void HandleInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             TryStartCast();
         }
     }
 
-    private void TryStartCast() {
-        if (GameStateManager.Instance == null) {
+    private void TryStartCast()
+    {
+        if (GameStateManager.Instance == null)
+        {
             return;
         }
 
-        if (GameStateManager.Instance.IsState(GameState.Idle)) {
+        if (GameStateManager.Instance.IsState(GameState.Idle))
+        {
             GameStateManager.Instance.SetState(GameState.Dropping);
         }
     }
 
     private void HandleMovement()
     {
-        if (GameStateManager.Instance == null) {
+        if (GameStateManager.Instance == null)
+        {
             return;
         }
 
@@ -55,29 +61,34 @@ public class HookController : MonoBehaviour
         }
     }
 
-    private void HandleDropMovement() {
-        Vector3 postion = transform.position;
+    private void HandleDropMovement()
+    {
+        Vector3 position = transform.position;
 
-        postion.y -= dropSpeed * Time.deltaTime;
-        transform.position = postion;
+        position.y -= dropSpeed * Time.deltaTime;
+        transform.position = position;
 
-        if (postion.y <= maxDepth) {
+        if (position.y <= maxDepth)
+        {
             GameStateManager.Instance.SetState(GameState.Reeling);
         }
     }
 
-    private void HandleReelMovement() {
-        Vector3 postion = transform.position;
+    private void HandleReelMovement()
+    {
+        Vector3 position = transform.position;
 
-        postion.y += reelSpeed * Time.deltaTime;
+        position.y += reelSpeed * Time.deltaTime;
 
-        float horizontalInput = Input.GetAxis("Horizontal");
-        postion.x += horizontalInput * horizontalSpeed * Time.deltaTime;
-        transform.position = postion;
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        position.x += horizontalInput * horizontalSpeed * Time.deltaTime;
 
-        if (postion.y >= startPosition.y) {
+        transform.position = position;
+
+        if (position.y >= startPosition.y)
+        {
             transform.position = startPosition;
-            GameStateManager.Instance.SetState(GameState.Idle);
+            GameStateManager.Instance.SetState(GameState.Scoring);
         }
     }
 }

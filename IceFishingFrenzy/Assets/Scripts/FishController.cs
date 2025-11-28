@@ -62,7 +62,30 @@ public class FishController : MonoBehaviour
         Vector3 position = transform.position;
         float bob = Mathf.Sin(Time.time * bobFrequency + bobOffset) * bobAmplitude;
         position.y = baseY + bob;
-        
+
         transform.position = position;
+    }
+
+    public void SetValueMultiplier(float multiplier)
+    {
+        if (multiplier < 1f)
+        {
+            multiplier = 0f;
+        }
+
+        float newValue = baseValue * multiplier;
+        CurrentValue = Mathf.RoundToInt(newValue);
+    }
+
+    public void AttachToHook(Transform hookTransform)
+    {
+        isCaught = true;
+
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.simulated = false;
+        }
+        transform.SetParent(hookTransform);
     }
 }
