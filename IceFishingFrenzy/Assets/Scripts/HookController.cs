@@ -81,6 +81,12 @@ public class HookController : MonoBehaviour
         position.y += reelSpeed * Time.deltaTime;
 
         float horizontalInput = Input.GetAxisRaw("Horizontal");
+
+        if (Mathf.Abs(horizontalInput) < 0.4f)
+        {
+            horizontalInput = 0f;
+        }
+
         position.x += horizontalInput * horizontalSpeed * Time.deltaTime;
 
         transform.position = position;
