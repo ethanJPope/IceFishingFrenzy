@@ -8,7 +8,10 @@ public class HookController : MonoBehaviour
     [SerializeField] private float horizontalSpeed = 4f;
 
     [Header("Depth Settings")]
-    [SerializeField] private float maxDepth = -20f;
+    [SerializeField] private float defaultMaxDepth = -20f;
+
+    [Header("Upgrades")]
+    [SerializeField] private PlayerUpgrades playerUpgrades;
 
     private Vector3 startPosition;
 
@@ -68,11 +71,15 @@ public class HookController : MonoBehaviour
         position.y -= dropSpeed * Time.deltaTime;
         transform.position = position;
 
+        float maxDepth = GetCurrentMaxDepth();
+
         if (position.y <= maxDepth)
         {
             GameStateManager.Instance.SetState(GameState.Reeling);
         }
     }
+
+
 
     private void HandleReelMovement()
     {
@@ -87,6 +94,15 @@ public class HookController : MonoBehaviour
             horizontalInput = 0f;
         }
 
+        if (position.x > 2.5f)
+        {
+            position.x = 2.5f;
+        }
+        else if (position.x < -2.5f)
+        {
+            position.x = -2.5f;
+        }
+
         position.x += horizontalInput * horizontalSpeed * Time.deltaTime;
 
         transform.position = position;
@@ -96,5 +112,15 @@ public class HookController : MonoBehaviour
             transform.position = startPosition;
             GameStateManager.Instance.SetState(GameState.Scoring);
         }
+    }
+
+    private float GetCurrentMaxDepth()
+    {
+    if (playerUpgrades != null)
+    {
+        return playerUpgrades.GetMaxDepth();
+    }
+
+    return defaultMaxDepth;
     }
 }

@@ -178,8 +178,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d27b5560a93d07c408b0df7d921b9fa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishController
+  fishSpriteRenderer: {fileID: 8694211762231847894}
+  fishSprite1: {fileID: 3658569535416648312, guid: 9c34fd3452f86784c85ac16bb6256371, type: 3}
+  fishSprite2: {fileID: -3066503393598026269, guid: a352f96da4ea0404680c74928891bcb9, type: 3}
+  fishSprite3: {fileID: 5639210824050873060, guid: bc5b2cec841508c4e92f1f19a0af1774, type: 3}
+  fishSprite4: {fileID: 3465286685962602723, guid: db7efd2e5974e754ea89dc58abf304bc, type: 3}
   baseValue: 5
   moveSpeed: 1.5
-  swimRange: 2
+  leftBoundX: -2.5
+  rightBoundX: 2.5
   bobAmplitude: 0.1
   bobFrequency: 2

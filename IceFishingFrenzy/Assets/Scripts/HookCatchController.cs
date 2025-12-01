@@ -4,41 +4,56 @@ using UnityEngine;
 public class HookCatchController : MonoBehaviour
 {
     [Header("Catch Settings")]
-    [SerializeField] private int maxCatchCount = 3;
+    [SerializeField] private int defaultMaxCatchCount = 3;
+
+    [Header("Upgrades")]
+    [SerializeField] private PlayerUpgrades playerUpgrades;
 
     private List<FishController> caughtFish = new List<FishController>();
 
     public int MaxCatchCount
     {
-        get { return maxCatchCount; }
+        get { return GetCurrentMaxCatchCount(); }
     }
 
-    public int CaughtFish
+    public int CurrentCatchCount
     {
         get { return caughtFish.Count; }
     }
 
     public bool IsFull
     {
-        get { return caughtFish.Count >= maxCatchCount; }
+        get { return caughtFish.Count >= GetCurrentMaxCatchCount(); }
     }
 
-    private void OnTriggerEnter2D(Collider2D collider)
+    private int GetCurrentMaxCatchCount()
+    {
+        if (playerUpgrades != null)
+        {
+            return playerUpgrades.GetCatchCapacity();
+        }
+
+        return defaultMaxCatchCount;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (GameStateManager.Instance == null)
         {
             return;
         }
+
         if (!GameStateManager.Instance.IsState(GameState.Reeling))
         {
             return;
         }
+
         if (IsFull)
         {
             return;
         }
 
-        FishController fish = collider.GetComponent<FishController>();
+        FishController fish = other.GetComponent<FishController>();
 
         if (fish == null)
         {
@@ -49,6 +64,7 @@ public class HookCatchController : MonoBehaviour
         {
             return;
         }
+
         CatchFish(fish);
     }
 
@@ -66,17 +82,18 @@ public class HookCatchController : MonoBehaviour
 
     private void HandleHookFull()
     {
-
+        
     }
 
     public List<FishController> GetCaughtFishCopy()
     {
-        List<FishController> copy = new List<FishController>(caughtFish);
+        List<FishController> copy = new List<FishController>();
 
         for (int i = 0; i < caughtFish.Count; i++)
         {
-            caughtFish.RemoveAt(0);
+            copy.Add(caughtFish[i]);
         }
+
         return copy;
     }
 
@@ -94,7 +111,7 @@ public class HookCatchController : MonoBehaviour
         return released;
     }
 
-    public void ClearCaughtFish()
+    public void ClearCaughtFishWithoutReturning()
     {
         caughtFish.Clear();
     }

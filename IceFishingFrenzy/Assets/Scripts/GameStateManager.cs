@@ -28,6 +28,11 @@ public class GameStateManager : MonoBehaviour
         CurrentState = newState;
     }
 
+    public void SetIdleState()
+    {
+        CurrentState = GameState.Idle;
+    }
+
     public bool IsState(GameState state)
     {
         return CurrentState == state;

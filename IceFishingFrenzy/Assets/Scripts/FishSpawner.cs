@@ -13,8 +13,7 @@ public class FishSpawner : MonoBehaviour
 
     [Header("Spawn Settings")]
     [SerializeField] private int fishCount = 30;
-    [SerializeField]
-    private float maxValueMultiplier = 4f;
+    [SerializeField] private float maxValueMultiplier = 4f;
 
     private List<FishController> activeFish = new List<FishController>();
 

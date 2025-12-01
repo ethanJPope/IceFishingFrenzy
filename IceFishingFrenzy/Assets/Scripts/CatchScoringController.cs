@@ -11,7 +11,6 @@ public class CatchScoringController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Current Game State: " + (GameStateManager.Instance != null ? GameStateManager.Instance.CurrentState.ToString() : "No GameStateManager"));
         if (GameStateManager.Instance == null)
         {
             return;

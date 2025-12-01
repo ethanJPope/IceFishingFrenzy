@@ -2,13 +2,24 @@ using UnityEngine;
 
 public class FishController : MonoBehaviour
 {
+    [Header("Sprites")]
+    [SerializeField] private SpriteRenderer fishSpriteRenderer;
+    [SerializeField] private Sprite fishSprite1;
+    [SerializeField] private Sprite fishSprite2;
+    [SerializeField] private Sprite fishSprite3;
+    [SerializeField] private Sprite fishSprite4;
+
     [Header("Value")]
     [SerializeField] private int baseValue = 5;
     public int CurrentValue { get; private set; }
 
     [Header("Swim Settings")]
     [SerializeField] private float moveSpeed = 1.5f;
-    [SerializeField] private float swimRange = 2f;
+    //[SerializeField] private float swimRange = 2f;
+
+    [Header("Gloabl Swim Bounds")]
+    [SerializeField] private float leftBoundX = -8f;
+    [SerializeField] private float rightBoundX = 8f;
 
     [Header("Bob Settings")]
     [SerializeField] private float bobAmplitude = 0.1f;
@@ -23,12 +34,15 @@ public class FishController : MonoBehaviour
 
     private void Start()
     {
+        fishSpriteRenderer = GetComponent<SpriteRenderer>();
         startX = transform.position.x;
         baseY = transform.position.y;
-        CurrentValue = baseValue;
+
+        SetSprite();
 
         bobOffset = Random.Range(0f, Mathf.PI * 2f);
     }
+
 
     private void Update()
     {
@@ -39,22 +53,57 @@ public class FishController : MonoBehaviour
 
         HandleSwim();
         HandleBob();
+        SetSprite();
+    }
+
+    private void SetSprite()
+    {
+        float currentY = transform.position.y;
+        if (currentY >= -10)
+        {
+            fishSpriteRenderer.sprite = fishSprite1;
+        }
+        else if (currentY >= -20)
+        {
+            fishSpriteRenderer.sprite = fishSprite2;
+        }
+        else if (currentY >= -30)
+        {
+            fishSpriteRenderer.sprite = fishSprite3;
+        }
+        else
+        {
+            fishSpriteRenderer.sprite = fishSprite4;
+        }
     }
 
     private void HandleSwim()
     {
         Vector3 position = transform.position;
         position.x += swimDirection * moveSpeed * Time.deltaTime;
-        transform.position = position;
-        float distanceFromStart = Mathf.Abs(position.x - startX);
 
-        if (distanceFromStart >= swimRange)
+        if (position.x <= leftBoundX)
         {
-            swimDirection *= -1f;
-            Vector3 localScale = transform.localScale;
-            localScale.x = Mathf.Abs(localScale.x) * swimDirection;
-            transform.localScale = localScale;
+            position.x = leftBoundX;
+            swimDirection = 1f;
+            FlipSprite();
         }
+        else if (position.x >= rightBoundX)
+        {
+            position.x = rightBoundX;
+            swimDirection = -1f;
+            FlipSprite();
+        }
+
+        transform.position = position;
+    }
+
+    
+    private void FlipSprite()
+    {
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * swimDirection;
+        transform.localScale = scale;
     }
 
     private void HandleBob()
@@ -68,7 +117,7 @@ public class FishController : MonoBehaviour
 
     public void SetValueMultiplier(float multiplier)
     {
-        if (multiplier < 1f)
+        if (multiplier < 0f)
         {
             multiplier = 0f;
         }
